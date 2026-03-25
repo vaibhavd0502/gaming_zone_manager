@@ -6,30 +6,20 @@ function toggleStation(id) {
     const select = document.getElementById(`ctrl-${id}`);
 
     if (!activeSessions[id]) {
-        // --- START SESSION LOGIC ---
-        const startTimeStr = new Date().toLocaleTimeString();
-        const customer = nameInput.value || "Guest";
-        const setup = select.selectedOptions[0].text;
-
+        // --- START SESSION (No WhatsApp) ---
         activeSessions[id] = {
             startTime: Date.now(),
             rate: parseInt(select.value),
             interval: setInterval(() => updateUI(id), 1000)
         };
 
-        // Prepare WhatsApp Message
-        const startMsg = `🎮 *Gamer's Paradise - SESSION START*%0A------------------------- %0A*Station:* ${id}%0A*Customer:* ${customer}%0A*Setup:* ${setup}%0A*Start Time:* ${startTimeStr}`;
-        
-        // Open WhatsApp to send to group
-        window.open(`https://wa.me/?text=${startMsg}`, '_blank');
-
-        // Update UI
+        // UI Updates only
         btn.innerText = "Stop & Save";
         btn.className = "btn-stop";
         select.disabled = true;
         nameInput.disabled = true;
     } else {
-        // --- STOP SESSION LOGIC ---
+        // --- STOP SESSION (Send WhatsApp) ---
         stopSession(id);
     }
 }
@@ -44,7 +34,6 @@ function updateUI(id) {
     
     document.getElementById(`timer-${id}`).innerText = `${h}:${m}:${s}`;
     
-    // Calculate current cost
     const cost = (elapsedSecs / 3600) * session.rate;
     document.getElementById(`bill-${id}`).innerText = `₹${cost.toFixed(2)}`;
 }
@@ -57,10 +46,10 @@ function stopSession(id) {
     const duration = document.getElementById(`timer-${id}`).innerText;
     const total = document.getElementById(`bill-${id}`).innerText;
 
-    // Prepare WhatsApp Message
+    // Prepare WhatsApp Message for END only
     const endMsg = `🏁 *Gamer's Paradise - SESSION END*%0A------------------------- %0A*Station:* ${id}%0A*Customer:* ${customer}%0A*Duration:* ${duration}%0A*Total Bill:* ${total}%0A*Status:* Collected ✅`;
 
-    // Open WhatsApp to send to group
+    // Open WhatsApp
     window.open(`https://wa.me/?text=${endMsg}`, '_blank');
 
     // Reset UI
