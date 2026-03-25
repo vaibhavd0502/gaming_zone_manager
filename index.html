@@ -1,256 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamer's Paradise Admin</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --neon-green: #22c55e;
-            --neon-red: #ef4444;
-            --text: #f8fafc;
-            --input-bg: #0f172a;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gamer's Paradise Admin</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
+<style>
+:root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --neon-green: #22c55e;
+    --neon-red: #ef4444;
+    --text: #f8fafc;
+    --input-bg: #0f172a;
+}
 
-        h1 {
-            color: var(--neon-green);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
-        }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 900px;
-        }
+h1 {
+    color: var(--neon-green);
+    margin-bottom: 30px;
+}
 
-        .card {
-            background-color: var(--card);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
-            transition: transform 0.2s;
-        }
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 900px;
+}
 
-        h2 { margin-top: 0; color: #94a3b8; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+.card {
+    background-color: var(--card);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+}
 
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
+.timer {
+    font-size: 3rem;
+    margin: 15px 0;
+}
 
-        label { font-size: 0.8rem; color: #64748b; margin-left: 5px; }
+.bill {
+    font-size: 1.5rem;
+    color: var(--neon-green);
+}
 
-        input[type="text"], select {
-            width: 100%;
-            padding: 12px;
-            background: var(--input-bg);
-            color: white;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            margin-top: 5px;
-        }
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        input[type="text"]:focus { border-color: var(--neon-green); outline: none; }
+.btn-start { background: var(--neon-green); }
+.btn-stop { background: var(--neon-red); }
 
-        .timer {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 3.2rem;
-            font-weight: bold;
-            margin: 20px 0;
-            color: var(--text);
-        }
+.status-dot {
+    height: 10px;
+    width: 10px;
+    background: gray;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
 
-        .bill {
-            font-size: 1.6rem;
-            color: var(--neon-green);
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        button {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-
-        .btn-start { background-color: var(--neon-green); color: #052e16; }
-        .btn-stop { background-color: var(--neon-red); color: white; }
-        
-        button:disabled { background-color: #475569; cursor: not-allowed; }
-
-        .status-dot {
-            height: 10px;
-            width: 10px;
-            background-color: #475569;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .active-dot { background-color: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
-    </style>
+.active-dot {
+    background: var(--neon-green);
+}
+</style>
 </head>
+
 <body>
 
-    <h1>Gamer's Paradise</h1>
+<h1>Gamer's Paradise</h1>
 
-    <div class="dashboard">
-        <div class="card" id="card-1">
-            <h2><span id="dot-1" class="status-dot"></span>Station 1</h2>
-            <div class="input-group">
-                <label>Customer Name</label>
-                <input type="text" id="name-1" placeholder="Enter Name">
-            </div>
-            <div class="input-group">
-                <label>Controllers</label>
-                <select id="ctrl-1">
-                    <option value="100">1 Controller (₹100/hr)</option>
-                    <option value="150">2 Controllers (₹150/hr)</option>
-                    <option value="200">3 Controllers (₹200/hr)</option>
-                    <option value="250">4 Controllers (₹250/hr)</option>
-                </select>
-            </div>
-            <div class="timer" id="timer-1">00:00:00</div>
-            <div class="bill" id="bill-1">₹0.00</div>
-            <button onclick="toggleStation(1)" id="btn-1" class="btn-start">Start Session</button>
-        </div>
+<div class="dashboard">
 
-        <div class="card" id="card-2">
-            <h2><span id="dot-2" class="status-dot"></span>Station 2</h2>
-            <div class="input-group">
-                <label>Customer Name</label>
-                <input type="text" id="name-2" placeholder="Enter Name">
-            </div>
-            <div class="input-group">
-                <label>Controllers</label>
-                <select id="ctrl-2">
-                    <option value="100">1 Controller (₹100/hr)</option>
-                    <option value="150">2 Controllers (₹150/hr)</option>
-                    <option value="200">3 Controllers (₹200/hr)</option>
-                    <option value="250">4 Controllers (₹250/hr)</option>
-                </select>
-            </div>
-            <div class="timer" id="timer-2">00:00:00</div>
-            <div class="bill" id="bill-2">₹0.00</div>
-            <button onclick="toggleStation(2)" id="btn-2" class="btn-start">Start Session</button>
-        </div>
-    </div>
+<!-- STATION 1 -->
+<div class="card">
+<h3><span id="dot-1" class="status-dot"></span>Station 1</h3>
 
-    <script>
-        
-    let activeSessions = {};
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxd5ecst8-XDpQHqiqFU91udyL0a0im7OVeuivmcmOcP1apAS0UkhEflBUO1exeZHno/exec"; // <-- add your script URL here
+<input type="text" id="name-1" placeholder="Customer Name">
+<select id="ctrl-1">
+<option value="100">1 Controller (₹100/hr)</option>
+<option value="150">2 Controllers (₹150/hr)</option>
+<option value="200">3 Controllers (₹200/hr)</option>
+<option value="250">4 Controllers (₹250/hr)</option>
+</select>
 
-    function toggleStation(id) {
-        const btn = document.getElementById(btn-${id});
-        const dot = document.getElementById(dot-${id});
-        const select = document.getElementById(ctrl-${id});
-        const nameInput = document.getElementById(name-${id});
+<div class="timer" id="timer-1">00:00:00</div>
+<div class="bill" id="bill-1">₹0.00</div>
 
-        if (!activeSessions[id]) {
-            // START SESSION
+<button onclick="toggleStation(1)" id="btn-1" class="btn-start">Start Session</button>
+</div>
+
+<!-- STATION 2 -->
+<div class="card">
+<h3><span id="dot-2" class="status-dot"></span>Station 2</h3>
+
+<input type="text" id="name-2" placeholder="Customer Name">
+<select id="ctrl-2">
+<option value="100">1 Controller (₹100/hr)</option>
+<option value="150">2 Controllers (₹150/hr)</option>
+<option value="200">3 Controllers (₹200/hr)</option>
+<option value="250">4 Controllers (₹250/hr)</option>
+</select>
+
+<div class="timer" id="timer-2">00:00:00</div>
+<div class="bill" id="bill-2">₹0.00</div>
+
+<button onclick="toggleStation(2)" id="btn-2" class="btn-start">Start Session</button>
+</div>
+
+</div>
+
+<script>
+let activeSessions = {};
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxd5ecst8-XDpQHqiqFU91udyL0a0im7OVeuivmcmOcP1apAS0UkhEflBUO1exeZHno/exec";
+
+// START / STOP
+function toggleStation(id) {
+    const btn = document.getElementById(`btn-${id}`);
+    const dot = document.getElementById(`dot-${id}`);
+    const select = document.getElementById(`ctrl-${id}`);
+    const nameInput = document.getElementById(`name-${id}`);
+
+    if (!activeSessions[id]) {
+        // START
+        const startTime = Date.now();
+
+        activeSessions[id] = {
+            startTime: startTime,
+            rate: parseInt(select.value),
+            interval: setInterval(() => updateUI(id), 1000)
+        };
+
+        // SAVE TO LOCAL STORAGE
+        localStorage.setItem(`station-${id}`, JSON.stringify({
+            startTime,
+            rate: select.value,
+            name: nameInput.value
+        }));
+
+        btn.innerText = "Stop & Save";
+        btn.className = "btn-stop";
+        dot.classList.add("active-dot");
+
+        select.disabled = true;
+        nameInput.disabled = true;
+
+    } else {
+        stopSession(id);
+    }
+}
+
+// TIMER UPDATE
+function updateUI(id) {
+    const session = activeSessions[id];
+    const elapsedSecs = Math.floor((Date.now() - session.startTime) / 1000);
+
+    const h = String(Math.floor(elapsedSecs / 3600)).padStart(2, '0');
+    const m = String(Math.floor((elapsedSecs % 3600) / 60)).padStart(2, '0');
+    const s = String(elapsedSecs % 60).padStart(2, '0');
+
+    document.getElementById(`timer-${id}`).innerText = `${h}:${m}:${s}`;
+
+    const cost = (elapsedSecs / 3600) * session.rate;
+    document.getElementById(`bill-${id}`).innerText = `₹${cost.toFixed(2)}`;
+}
+
+// STOP SESSION
+async function stopSession(id) {
+    const session = activeSessions[id];
+    clearInterval(session.interval);
+
+    const btn = document.getElementById(`btn-${id}`);
+    const dot = document.getElementById(`dot-${id}`);
+    const select = document.getElementById(`ctrl-${id}`);
+    const nameInput = document.getElementById(`name-${id}`);
+
+    const finalData = {
+        Customer_Name: nameInput.value || "Anonymous",
+        Station: `Station ${id}`,
+        Controllers: select.selectedOptions[0].text,
+        Duration: document.getElementById(`timer-${id}`).innerText,
+        Total_Bill: document.getElementById(`bill-${id}`).innerText.replace('₹', '')
+    };
+
+    btn.innerText = "Saving...";
+    btn.disabled = true;
+
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(finalData)
+        });
+
+        alert(`Data Saved!\nCustomer: ${finalData.Customer_Name}\nTotal: ₹${finalData.Total_Bill}`);
+
+    } catch (e) {
+        alert("Saved locally, but sync failed.");
+    }
+
+    // REMOVE LOCAL STORAGE
+    localStorage.removeItem(`station-${id}`);
+
+    delete activeSessions[id];
+
+    btn.innerText = "Start Session";
+    btn.className = "btn-start";
+    btn.disabled = false;
+
+    dot.classList.remove("active-dot");
+    select.disabled = false;
+    nameInput.disabled = false;
+    nameInput.value = "";
+
+    document.getElementById(`timer-${id}`).innerText = "00:00:00";
+    document.getElementById(`bill-${id}`).innerText = "₹0.00";
+}
+
+// LOAD SESSION ON PAGE LOAD
+window.onload = function () {
+    [1, 2].forEach(id => {
+        const data = localStorage.getItem(`station-${id}`);
+        if (data) {
+            const session = JSON.parse(data);
+
             activeSessions[id] = {
-                startTime: Date.now(),
-                rate: parseInt(select.value),
+                startTime: session.startTime,
+                rate: parseInt(session.rate),
                 interval: setInterval(() => updateUI(id), 1000)
             };
 
-            btn.innerText = "Stop & Save";
-            btn.className = "btn-stop";
-            dot.classList.add("active-dot");
-            select.disabled = true;
-            nameInput.disabled = true;
-        } else {
-            stopSession(id);
+            document.getElementById(`btn-${id}`).innerText = "Stop & Save";
+            document.getElementById(`btn-${id}`).className = "btn-stop";
+            document.getElementById(`dot-${id}`).classList.add("active-dot");
+
+            document.getElementById(`ctrl-${id}`).disabled = true;
+            document.getElementById(`name-${id}`).disabled = true;
+            document.getElementById(`name-${id}`).value = session.name;
+
+            updateUI(id);
         }
-    }
+    });
+};
+</script>
 
-    function updateUI(id) {
-        const session = activeSessions[id];
-        const elapsedSecs = Math.floor((Date.now() - session.startTime) / 1000);
-
-        const h = String(Math.floor(elapsedSecs / 3600)).padStart(2, '0');
-        const m = String(Math.floor((elapsedSecs % 3600) / 60)).padStart(2, '0');
-        const s = String(elapsedSecs % 60).padStart(2, '0');
-
-        document.getElementById(timer-${id}).innerText = ${h}:${m}:${s};
-
-        const cost = (elapsedSecs / 3600) * session.rate;
-        document.getElementById(bill-${id}).innerText = ₹${cost.toFixed(2)};
-    }
-
-    async function stopSession(id) {
-        const session = activeSessions[id];
-        clearInterval(session.interval);
-
-        const btn = document.getElementById(btn-${id});
-        const dot = document.getElementById(dot-${id});
-        const select = document.getElementById(ctrl-${id});
-        const nameInput = document.getElementById(name-${id});
-
-        const finalData = {
-            Customer_Name: nameInput.value || "Anonymous",
-            Station: Station ${id},
-            Controllers: select.selectedOptions[0].text,
-            Duration: document.getElementById(timer-${id}).innerText,
-            Total_Bill: document.getElementById(bill-${id}).innerText.replace('₹', '')
-        };
-
-        btn.innerText = "Syncing Sheets...";
-        btn.disabled = true;
-
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(finalData)
-            });
-
-            alert(Data Saved!\nCustomer: ${finalData.Customer_Name}\nTotal: ₹${finalData.Total_Bill});
-        } catch (e) {
-            alert("Local Save Successful. Sheet Sync failed - Check internet.");
-            console.error(e);
-        }
-
-        // RESET UI
-        delete activeSessions[id];
-        btn.innerText = "Start Session";
-        btn.className = "btn-start";
-        btn.disabled = false;
-        dot.classList.remove("active-dot");
-        select.disabled = false;
-        nameInput.disabled = false;
-        nameInput.value = "";
-
-        document.getElementById(timer-${id}).innerText = "00:00:00";
-        document.getElementById(bill-${id}).innerText = "₹0.00";
-    }
-    </script>
 </body>
 </html>
