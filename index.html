@@ -5,108 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamer's Paradise Admin</title>
     <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --neon-green: #22c55e;
-            --neon-red: #ef4444;
-            --text: #f8fafc;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        h1 {
-            color: var(--neon-green);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .card {
-            background-color: var(--card);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            border: 1px solid #334155;
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
+        /* Keep all your CSS here (the :root, body, .card, etc. from your code above) */
+        :root { --bg: #0f172a; --card: #1e293b; --neon-green: #22c55e; --neon-red: #ef4444; --text: #f8fafc; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        h1 { color: var(--neon-green); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; text-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; max-width: 800px; }
+        .card { background-color: var(--card); border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); border: 1px solid #334155; transition: transform 0.2s; }
         h2 { margin-top: 0; color: #94a3b8; }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            background: #0f172a;
-            color: white;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 1rem;
-        }
-
-        .timer {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 20px 0;
-            color: var(--text);
-        }
-
-        .bill {
-            font-size: 1.5rem;
-            color: var(--neon-green);
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-
+        select { width: 100%; padding: 12px; background: #0f172a; color: white; border: 1px solid #475569; border-radius: 8px; margin-bottom: 20px; font-size: 1rem; }
+        .timer { font-family: 'Courier New', monospace; font-size: 3rem; font-weight: bold; margin: 20px 0; }
+        .bill { font-size: 1.5rem; color: var(--neon-green); margin-bottom: 20px; font-weight: bold; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
         .btn-start { background-color: var(--neon-green); color: #052e16; }
         .btn-stop { background-color: var(--neon-red); color: white; }
-        
-        button:active { transform: scale(0.98); }
-
-        .status-dot {
-            height: 10px;
-            width: 10px;
-            background-color: #475569;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
+        .status-dot { height: 10px; width: 10px; background-color: #475569; border-radius: 50%; display: inline-block; margin-right: 8px; }
         .active-dot { background-color: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
     </style>
 </head>
@@ -142,92 +54,6 @@
         </div>
     </div>
 
-    <script>
-        // REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT URL
-        const SCRIPT_URL = "YOUR_DEPLOYED_APPS_SCRIPT_URL_HERE";
-        
-        let activeSessions = {};
-
-        function toggleStation(id) {
-            const btn = document.getElementById(`btn-${id}`);
-            const dot = document.getElementById(`dot-${id}`);
-            const select = document.getElementById(`ctrl-${id}`);
-
-            if (!activeSessions[id]) {
-                // START SESSION
-                activeSessions[id] = {
-                    startTime: Date.now(),
-                    rate: parseInt(select.value),
-                    interval: setInterval(() => updateUI(id), 1000)
-                };
-                
-                btn.innerText = "Stop & Save";
-                btn.className = "btn-stop";
-                dot.classList.add("active-dot");
-                select.disabled = true;
-            } else {
-                // STOP SESSION
-                stopSession(id);
-            }
-        }
-
-        function updateUI(id) {
-            const session = activeSessions[id];
-            const elapsedSecs = Math.floor((Date.now() - session.startTime) / 1000);
-            
-            const h = String(Math.floor(elapsedSecs / 3600)).padStart(2, '0');
-            const m = String(Math.floor((elapsedSecs % 3600) / 60)).padStart(2, '0');
-            const s = String(elapsedSecs % 60).padStart(2, '0');
-            
-            document.getElementById(`timer-${id}`).innerText = `${h}:${m}:${s}`;
-            
-            // Calculate real-time bill
-            const cost = (elapsedSecs / 3600) * session.rate;
-            document.getElementById(`bill-${id}`).innerText = `₹${cost.toFixed(2)}`;
-        }
-
-        async function stopSession(id) {
-            const session = activeSessions[id];
-            clearInterval(session.interval);
-            
-            const btn = document.getElementById(`btn-${id}`);
-            const dot = document.getElementById(`dot-${id}`);
-            const select = document.getElementById(`ctrl-${id}`);
-
-            const finalData = {
-                Station: `Station ${id}`,
-                Controllers: select.selectedOptions[0].text,
-                Duration: document.getElementById(`timer-${id}`).innerText,
-                Total_Bill: document.getElementById(`bill-${id}`).innerText.replace('₹', '')
-            };
-
-            btn.innerText = "Saving to Sheets...";
-            btn.disabled = true;
-
-            try {
-                // Send to Google Sheets
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Apps Script requires no-cors for simple fetches
-                    body: JSON.stringify(finalData)
-                });
-                
-                alert(`Session Complete!\nStation: ${id}\nTotal: ₹${finalData.Total_Bill}`);
-            } catch (e) {
-                alert("Saved locally, but failed to reach Google Sheets. Check connection.");
-                console.error(e);
-            }
-
-            // Reset UI
-            delete activeSessions[id];
-            btn.innerText = "Start Session";
-            btn.className = "btn-start";
-            btn.disabled = false;
-            dot.classList.remove("active-dot");
-            select.disabled = false;
-            document.getElementById(`timer-${id}`).innerText = "00:00:00";
-            document.getElementById(`bill-${id}`).innerText = "₹0.00";
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
