@@ -1,5 +1,5 @@
 // REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT URL
-const SCRIPT_URL = "YOUR_DEPLOYED_APPS_SCRIPT_URL_HERE";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4H7UJDVnNBKdjIiA8qumtP8qkHFmlj3SIHLTnkFFrBEPlljoFzqew4E3HxrRTXw3k/exec";
 
 let activeSessions = {};
 
